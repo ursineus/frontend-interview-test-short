@@ -23,6 +23,35 @@
 	<div id="page">
 
 	</div>
+	<script type="text/javascript">
+////	script is relegated to bottom of page to avoid onLoad, onReady, $(document).ready and other timing based events.  As long as the form is read before this script block, it will run accordingly
 
+//		define event
+		var e = e ? e : window.event;
+//		define the form as it lacks a name or ID
+		var thoughtForm = document.forms[0];
+//		as html of form cannot be altered, change submmit action here
+		thoughtForm.onsubmit = function(e){
+//			prevent standard event behavior to not lose previous thoughts
+			if (e && e.preventDefault){
+			  e.preventDefault();
+			}else if (window.event && window.event.returnValue){
+			  window.eventReturnValue = false;
+			}
+//			define / find seconds to concatinate
+			var dateNow = new Date();
+			var currentSeconds = dateNow.getSeconds();
+//			define current contents of thought box and concatinate previously defined seconds
+			var currentThoughts = document.forms[0].elements[0].value + " - " + currentSeconds;
+//			define contents of 'page' div
+			var oldThoughts = document.getElementById('page').innerHTML;
+//			prepare / format combined thoughts of what was in the div and what was just submitted
+			var thoughtLog = "<p>" + currentThoughts + "</p>" + oldThoughts;
+//			assign the value of the thoughts amalgamation into the 'page' div
+			document.getElementById('page').innerHTML = thoughtLog;
+//			clear the text input so ready for the next thought
+			document.forms[0].elements[0].value = '';
+		}
+	</script>
 </body>
 </html>
